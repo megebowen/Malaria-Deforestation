@@ -13,8 +13,10 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r load_packages}
 
 library(tidyverse)
-library(raster)
-library(sf)
+library(raster) ##load and manipulate rasters
+library(sf) ##load shapefiles
+library(spatstat) ##work with shapefiles
+library(tmap)
 
 ```
 
@@ -35,8 +37,25 @@ lossyear@crs
 
 ```{r load_shps}
 
-muni_shp <- 
+muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
 
+#plot both together
+plot(lossyear)
+plot(muni_shp,add=T)
+
+```
+
+
+```{r quick_tmap}
+
+##interest raster by muni?
+loss_clip <- crop(lossyear, extent(muni_shp))
+
+##need to compress lossyear to plot?
+
+##test_map <- tm_shape(loss_clip) +
+  tm_raster(title = "Test Map") 
+##test_map
 ```
 
 
