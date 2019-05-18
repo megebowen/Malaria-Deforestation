@@ -14,6 +14,34 @@ knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(raster)
+library(sf)
 
 ```
 
+
+```{r load_rasters}
+
+##load rasters
+
+lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_080W.tif")
+
+plot(lossyear)
+
+
+##what is projection?
+lossyear@crs
+```
+
+
+```{r load_shps}
+
+muni_shp <- 
+
+```
+
+
+## Research Questions
+
+1. Does 
+2.
+3.
