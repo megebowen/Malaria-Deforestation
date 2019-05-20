@@ -38,27 +38,44 @@ lossyear@crs
 ```{r load_shps}
 
 
-muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
+##selecting "nome" (Name?) & "populacao" (Population?) variables only for now
+muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios") %>% 
+  dplyr::select(populacao)
 #shp projection is also WGS84
 
-#plot both together
-##plot(lossyear)
-##plot(muni_shp,add=T)
+muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010") %>% 
+  dplyr::select(populacao)
 
 ```
 
 
 ```{r compress}
 
+##expand from 0.00025 x 0.00025 by a factor of 10 --> 0.0025 X 0.0025
 lossyear_res <- aggregate(lossyear, fact = 10)
 
+
+#plot both together
+plot(lossyear_res)
+plot(muni_2010,add=T)
+
+
+#crop muni to kinda fit this tile?
+muni_bounds <- as(extent(-75, -70, -10, -4), 'SpatialPolygons')
+crs(muni_bounds) <- crs(muni_2010)
+
+crop_muni <- sf::st_crop(muni_2010, muni_bounds)
+
 ##interest raster by muni?
-loss_clip <- crop(lossyear_res, extent(muni_shp))
+#loss_clip <- crop(lossyear_res, extent(muni_2010))
 
 ##need to compress lossyear to plot?
 
-test_map <- tm_shape(loss_clip) +
-  tm_raster(title = "Test Map") 
+test_map <- tm_shape(lossyear_res) +
+  tm_raster(title = "Test Map") +
+  tm_shape(crop_muni) +
+  tm_fill("darkgreen")
+  
 test_map
 ```
 
