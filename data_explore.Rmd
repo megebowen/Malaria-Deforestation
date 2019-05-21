@@ -43,8 +43,7 @@ muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios"
   dplyr::select(populacao)
 #shp projection is also WGS84
 
-muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010") %>% 
-  dplyr::select(populacao)
+muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010")
 
 ```
 
@@ -65,19 +64,41 @@ muni_bounds <- as(extent(-75, -70, -10, -4), 'SpatialPolygons')
 crs(muni_bounds) <- crs(muni_2010)
 
 crop_muni <- sf::st_crop(muni_2010, muni_bounds)
+```
+
+```{r extract_mask}
 
 ##interest raster by muni?
-#loss_clip <- crop(lossyear_res, extent(muni_2010))
+loss_clip <- crop(lossyear_res, extent(muni_shp))
 
-##need to compress lossyear to plot?
+```
 
+
+
+```{r tmap}
+
+##test map 1: border of shapefile ontop of raster
 test_map <- tm_shape(lossyear_res) +
   tm_raster(title = "Test Map") +
-  tm_shape(crop_muni) +
-  tm_fill("darkgreen")
+  tm_shape(muni_shp) +
+  tm_borders(col = "darkgreen")
   
 test_map
+
+##test map 2: "extract by mask" (loss_clip)
+##not working?
+test2 <- tm_shape(loss_clip) +
+  tm_raster(title = "test 2")
+
+test2
+
 ```
+
+##General Spatial R Questions:
+
+1. How to get these huge tile rasters down?! even by fact = 10 it took 20 minutes to get it down. Do we even want to get it down?
+2. can't use tm_shape with a shapefile with multiple columns? need to filter it to one attribute?
+3.
 
 
 ## Research Questions
