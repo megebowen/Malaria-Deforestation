@@ -16,7 +16,9 @@ library(tidyverse)
 library(raster) ##load and manipulate rasters
 library(sf) ##load shapefiles
 library(spatstat) ##work with shapefiles
-library(tmap)
+library(tmap) ##map rasters + shapefiles
+library(landscapemetrics) ##R equivalent to FRAGSTATS
+
 
 ```
 
@@ -43,7 +45,9 @@ muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios"
   dplyr::select(populacao)
 #shp projection is also WGS84
 
-muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010")
+##selecting pib (??) in municipios 2010
+muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010") %>% 
+  dplyr::select(pib)
 
 ```
 
@@ -56,20 +60,31 @@ lossyear_res <- aggregate(lossyear, fact = 10)
 
 #plot both together
 plot(lossyear_res)
-plot(muni_2010,add=T)
-
+plot(muni_shp,add=T)
 
 #crop muni to kinda fit this tile?
 muni_bounds <- as(extent(-75, -70, -10, -4), 'SpatialPolygons')
 crs(muni_bounds) <- crs(muni_2010)
 
 crop_muni <- sf::st_crop(muni_2010, muni_bounds)
+
+#plot both together
+plot(lossyear_res)
+plot(crop_muni,add=T)
 ```
 
 ```{r extract_mask}
 
 ##interest raster by muni?
 loss_clip <- crop(lossyear_res, extent(muni_shp))
+
+## crop and mask
+lossyear_res0 <- crop(lossyear_res, extent(crop_muni))
+lossyear_crop <- mask(lossyear_res0, crop_muni)
+
+## Check that it worked
+plot(lossyear_crop)
+plot(crop_muni, add=TRUE, lwd=2)
 
 ```
 
@@ -85,14 +100,24 @@ test_map <- tm_shape(lossyear_res) +
   
 test_map
 
-##test map 2: "extract by mask" (loss_clip)
+##test map 2: "extract by mask" (lossyear_crop)
 ##not working?
-test2 <- tm_shape(loss_clip) +
-  tm_raster(title = "test 2")
-
-test2
+test_map2 <- tm_shape(lossyear_crop) +
+  tm_raster(title = "Test Map") +
+  tm_shape(muni_shp) +
+  tm_borders(col = "darkgreen")
+  
+test_map2
 
 ```
+
+
+```{r explore_landscapemetrics}
+
+
+
+```
+
 
 ##General Spatial R Questions:
 
