@@ -12,12 +12,14 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r load_packages}
 
-library(tidyverse)
+library(tidyverse) 
 library(raster) ##load and manipulate rasters
 library(sf) ##load shapefiles
 library(spatstat) ##work with shapefiles
 library(tmap) ##map rasters + shapefiles
+library(rgdal) ##for projections and coord systems
 
+library(gfcanalysis) ##package specifically for Hansen Forestry Data!
 library(landscapetools) ##for landscape plotting/viz?
 library(landscapemetrics) ##R equivalent to FRAGSTATS
 
@@ -59,6 +61,8 @@ muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010")
 ##expand from 0.00025 x 0.00025 by a factor of 10 --> 0.0025 X 0.0025
 lossyear_res <- aggregate(lossyear, fact = 10)
 
+##reproject?
+lossyear_wgs <- projectRaster(lossyear_res, proj4string(+init=epsg:4326 +proj=longlat +ellps=WGS84))
 
 #plot both together
 plot(lossyear_res)
@@ -128,7 +132,8 @@ show_landscape(lossyear_crop)
 2. can't use tm_shape with a shapefile with multiple columns? need to filter it to one attribute?
 3. need a landscape raster? ie with patches, habitat types ...? or will the lossyear be the "landscape" and the patches/areas are in %loss of forest???
 
-
+- double check the projection (make sure it's ESPG: 4326)
+- nine states in the legal amazon (wikipedia)
 ## Research Questions
 
 1. Does 
