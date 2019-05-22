@@ -15,6 +15,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse) 
 library(raster) ##load and manipulate rasters
 library(sf) ##load shapefiles
+library(sp) ##spatial objects
 library(spatstat) ##work with shapefiles
 library(tmap) ##map rasters + shapefiles
 library(rgdal) ##for projections and coord systems
@@ -62,7 +63,19 @@ muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010")
 
 ##calc_gfc_tiles: figure out which tiles are needed based on AOI (shp file above)
 ##for this function, need to convert muni_shp from multipolygon (spat out by sf) to a spatialpolygon object
-tiles <- calc_gfc_tiles(aoi = muni_shp)
+
+#convert to spatial polygons
+spd <- sf::as_Spatial(st_geometry(muni_shp),
+                      IDs = as.character(1:nrow(muni_shp)))
+
+#muni_df <- muni_shp
+#muni_df$geometry <- NULL
+muni_df <- as.data.frame(muni_shp)
+
+muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
+
+tiles <- calc_gfc_tiles(aoi = muni_spd)
+tiles
 
 ##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online (double check the dataset is correct!)
 
