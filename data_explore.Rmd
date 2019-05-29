@@ -77,9 +77,16 @@ muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
 tiles <- calc_gfc_tiles(aoi = muni_spd)
 tiles
 
-##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online (double check the dataset is correct!)
+##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online 
+##DO NOT TOUCH THIS PLZ
+output_folder <- "/Malaria-Deforestation/tiles"
+dir.create(output_folder)
+download_tiles(tiles, output_folder=output_folder, dataset = "GFC-2018-v1.6")
 
 ##once grabbed all 'download_tiles' above, can use 'extract_gfc' to grab the "change" layers (treecover2000, loss, gain, lossyear, datamask)
+##THIS IS NOT WORKING
+gfc <- extract_gfc(aoi = muni_spd,
+                   data_folder = ".")
 
 ##threshold_gfc after
 
