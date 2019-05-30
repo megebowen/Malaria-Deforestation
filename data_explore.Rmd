@@ -124,14 +124,18 @@ plot(muni_spd, add=T)
 
 ##filter by value = 1
 filter_2001 <- subsetclip %in% 1
-filter2001 <- mask(subsetclip, filter_2001)
 
-filter_2002 <- subsetclip %in% 1:2
-filter2002 <- mask(subsetclip, filter_2002)
+filter2001 <- subsetclip
+filter2001[filter2001 > 1] <- NA
+
+filter_2002 <- subsetclip %in% 2
+
+filter2002 <- subsetclip
+filter2002[filter2002  1] <- NA
 
 ##mini extent
 ext <- extent(c(-67.1, -67, -10, -9.9))
-plot(filter_2001, ext= ext,
+plot(filter2001, ext= ext,
      main="2001")
 plot(filter_2002, ext= ext,
      main="2001-2002")
