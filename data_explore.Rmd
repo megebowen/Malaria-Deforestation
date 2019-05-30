@@ -46,9 +46,12 @@ lossyear@crs
 ##Muni_shp: legal Amazon boundary
 ##muni_2010: Brazil boundary?? not sure
 
-##selecting "uf" (is this the municipal boundary?)" variables only for now
+
+
+##selecting "estado_id = 1" to subset
 muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios") %>% 
-  dplyr::select(uf)
+  dplyr::filter(estado_id == 1) %>% 
+  dplyr::select(id, estado_id)
 #shp projection is also WGS84
 
 plot(muni_shp)
@@ -58,6 +61,54 @@ muni_2010 <- read_sf(dsn = 'municipality_shapefiles', layer = "municipios_2010")
   dplyr::select(pib)
 
 ```
+
+
+```{r subset_gfc}
+
+#using the "muni_shp" subset above (with estado_id = 1)
+
+##calc_gfc_tiles: figure out which tiles are needed based on AOI (shp file above)
+##for this function, need to convert muni_shp from multipolygon (spat out by sf) to a spatialpolygon object
+
+#convert to spatial polygons
+spd <- sf::as_Spatial(st_geometry(muni_shp),
+                      IDs = as.character(1:nrow(muni_shp)))
+
+#muni_df <- muni_shp
+#muni_df$geometry <- NULL
+muni_df <- as.data.frame(muni_shp)
+
+muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
+
+#find the # of tiles needed. For the estado_id = 1 subset, need 4 tiles
+tiles <- calc_gfc_tiles(aoi = muni_spd)
+tiles
+
+##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online 
+##DO NOT TOUCH THIS PLZ
+dir.create("tiles_subset")
+download_tiles(tiles, output_folder = "tiles_subset", dataset = "GFC-2018-v1.6")
+
+#subset of subset
+output_folder <- "."
+download_tiles(tiles[2], output_folder = ".", dataset = "GFC-2018-v1.6")
+
+##once grabbed all 'download_tiles' above, can use 'extract_gfc' to grab the "change" layers (treecover2000, loss, gain, lossyear, datamask)
+##THIS IS NOT WORKING
+##NEED TO WORK ON MOSAIC, make it into a RasterBrick?
+gfc <- extract_gfc(aoi = muni_spd,
+                   output_folder,
+                   filename = "test.tif")
+
+mosaic_test <- mosaic()
+raster1 <- raster("tiles_subset/Hansen_GFC-2018-v1.6_datamask_00N_070W.tif")
+
+##threshold_gfc after
+
+##THEN can use gfc_stats
+
+```
+
 
 ```{r test_gfc}
 
