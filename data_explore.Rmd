@@ -32,7 +32,7 @@ library(landscapemetrics) ##R equivalent to FRAGSTATS
 
 ##load rasters
 
-lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_080W.tif")
+#lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_080W.tif")
 
 #plot(lossyear)
 
@@ -86,8 +86,8 @@ tiles
 
 ##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online 
 ##DO NOT TOUCH THIS PLZ
-dir.create("tiles_subset")
-download_tiles(tiles, output_folder = "tiles_subset", dataset = "GFC-2018-v1.6")
+#dir.create("tiles_subset")
+#download_tiles(tiles, output_folder = "tiles_subset", dataset = "GFC-2018-v1.6")
 
 #subset of subset
 output_folder <- "."
@@ -97,7 +97,7 @@ download_tiles(tiles[2], output_folder = ".", dataset = "GFC-2018-v1.6")
 ##THIS IS NOT WORKING
 ##NEED TO WORK ON MOSAIC, make it into a RasterBrick?
 gfc <- extract_gfc(aoi = muni_spd,
-                   output_folder,
+                   data_folder =".",
                    filename = "test.tif")
 
 mosaic_test <- mosaic()
@@ -108,6 +108,39 @@ raster1 <- raster("tiles_subset/Hansen_GFC-2018-v1.6_datamask_00N_070W.tif")
 ##THEN can use gfc_stats
 
 ```
+
+```{r check_subset}
+
+##check the tiles that they have cumulative loss for each year (2001, 2002, etc)
+lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_070W.tif")
+
+treecover2000 <- raster("Hansen_GFC-2018-v1.6_treecover2000_00N_070W.tif")
+
+subsetclip <- crop(lossyear, extent(muni_spd))
+subset2000 <- crop(treecover2000, extent(muni_spd))
+
+plot(subsetclip)
+plot(muni_spd, add=T)
+
+##filter by value = 1
+filter_2001 <- subsetclip %in% 1
+filter2001 <- mask(subsetclip, filter_2001)
+
+filter_2002 <- subsetclip %in% 1:2
+filter2002 <- mask(subsetclip, filter_2002)
+
+##mini extent
+ext <- extent(c(-67.1, -67, -10, -9.9))
+plot(filter_2001, ext= ext,
+     main="2001")
+plot(filter_2002, ext= ext,
+     main="2001-2002")
+
+filter_2001 <- mask(subsetclip, filter_2001)
+
+
+```
+
 
 
 ```{r test_gfc}
@@ -129,15 +162,8 @@ tiles <- calc_gfc_tiles(aoi = muni_spd)
 tiles
 
 ##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online 
-##DO NOT TOUCH THIS PLZ
-output_folder <- "/Malaria-Deforestation/tiles"
-dir.create(output_folder)
-download_tiles(tiles, output_folder=output_folder, dataset = "GFC-2018-v1.6")
 
 ##once grabbed all 'download_tiles' above, can use 'extract_gfc' to grab the "change" layers (treecover2000, loss, gain, lossyear, datamask)
-##THIS IS NOT WORKING
-gfc <- extract_gfc(aoi = muni_spd,
-                   data_folder = ".")
 
 ##threshold_gfc after
 
