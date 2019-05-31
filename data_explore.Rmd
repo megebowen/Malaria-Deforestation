@@ -125,23 +125,38 @@ plot(muni_spd, add=T)
 ##filter by value = 1
 filter_2001 <- subsetclip %in% 1
 
+#this works?
 filter2001 <- subsetclip
 filter2001[filter2001 > 1] <- NA
 
 filter_2002 <- subsetclip %in% 2
 
-filter2002 <- subsetclip
-filter2002[filter2002  1] <- NA
+#both years
+filter_0102 <- subsetclip %in% 1:2
+
+###not working
+#filter2002 <- subsetclip
+#filter2002[filter2002 <= 1] <- NA
 
 ##mini extent
 ext <- extent(c(-67.1, -67, -10, -9.9))
-plot(filter2001, ext= ext,
-     main="2001")
-plot(filter_2002, ext= ext,
-     main="2001-2002")
+par(mfrow = c(1,2))
+plot(filter_2001, ext= ext,
+     main="2001",
+     xlab = "lat",
+     ylab = "long")
+plot(filter_0102, ext=ext,
+     main="2001-2002",
+     xlab = "lat",
+     ylab = "long")
 
-filter_2001 <- mask(subsetclip, filter_2001)
-
+#test_map <- tm_shape(filter_2001) +
+  tm_raster(title = "Test Map") +
+  tm_shape(muni_spd) +
+  tm_layout(earth.boundary = ext) +
+  tm_borders(col = "darkgreen")
+  
+#test_map
 
 ```
 
