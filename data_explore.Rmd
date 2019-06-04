@@ -154,7 +154,7 @@ plot(filter_2001, ext= ext,
      xlab = "lat",
      ylab = "long")
 plot(filter_0102, ext=ext,
-     main="2001-2002",
+     main="2002",
      xlab = "lat",
      ylab = "long")
 
@@ -278,8 +278,18 @@ show_landscape(lossyear_crop)
 
 - double check the projection (make sure it's ESPG: 4326)
 - nine states in the legal amazon (wikipedia)
-## Research Questions
 
-1. Does 
-2.
-3.
+## Landscape Metrics Notes
+
+- Area and edge metrics describe the size of patches and classes and the amount of edge. An edge is defined as the border between two patches of class i and k in meters. These metrics mainly characterize the composition of the landscape and are able to show dominance or rareness of classes.
+- Shape metrics describe the shape of patches, mainly by using its area and perimeter. This can be important for many research questions, because e.g. even though, being equal in size, long and narrow patches has probably different characteristics than a squared patch of the same size.
+- Core metrics describe the area of patches that are not an edge. These metrics can be interesting for research questions in which e.g. only areas that are not influenced by neighboring patches of a different class are of interest.
+- Aggregation metrics describe if patches (of the same class) are rather clumped (aggregated) or tend to be isolated. Following, these metrics describe mainly the spatial configuration of the landscape.
+
+
+## Notes from June 4
+- patch level info
+- how to get the patch level calculations
+- raster based on one outline of one municipality
+- here's all of the raster data, here's all the municipality, run each municipality for each year (2001, 2001-2002, etc...)
+- 30x30 m is fine 
