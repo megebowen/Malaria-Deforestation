@@ -87,17 +87,16 @@ tiles
 ##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online 
 ##DO NOT TOUCH THIS PLZ
 #dir.create("tiles_subset")
-#download_tiles(tiles, output_folder = "tiles_subset", dataset = "GFC-2018-v1.6")
 
 #subset of subset
 output_folder <- "."
-download_tiles(tiles[2], output_folder = ".", dataset = "GFC-2018-v1.6")
+download_tiles(tiles[2], output_folder = ".", dataset = "GFC-2018-v1.6",images = c("treecover2000", "lossyear", "gain"))
 
 ##once grabbed all 'download_tiles' above, can use 'extract_gfc' to grab the "change" layers (treecover2000, loss, gain, lossyear, datamask)
 ##THIS IS NOT WORKING
 ##NEED TO WORK ON MOSAIC, make it into a RasterBrick?
 gfc <- extract_gfc(aoi = muni_spd,
-                   data_folder =".",
+                   data_folder = "Malaria-Deforestation/test",
                    filename = "test.tif")
 
 mosaic_test <- mosaic()
@@ -112,9 +111,18 @@ raster1 <- raster("tiles_subset/Hansen_GFC-2018-v1.6_datamask_00N_070W.tif")
 ```{r check_subset}
 
 ##check the tiles that they have cumulative loss for each year (2001, 2002, etc)
-lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_070W.tif")
+lossyear <- raster("Hansen_GFC-2017-v1.5_lossyear_00N_070W.tif") ##FIX
 
-treecover2000 <- raster("Hansen_GFC-2018-v1.6_treecover2000_00N_070W.tif")
+treecover2000 <- raster("Hansen_GFC-2017-v1.5_treecover2000_00N_070W.tif") ##FIX
+
+##Raster Stack: cover in 2000 and lossyear
+stack <- raster::stack(treecover2000, lossyear)
+
+###Extract by Muni_Shp
+##do not runstack_ext <- extract(stack, muni_shp)
+
+plot(lossyear)
+plot(muni_shp, add = T, col ="blue")
 
 subsetclip <- crop(lossyear, extent(muni_spd))
 subset2000 <- crop(treecover2000, extent(muni_spd))
