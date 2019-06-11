@@ -32,21 +32,17 @@ library(landscapemetrics) ##R equivalent to FRAGSTATS
 ```{r load_rasters}
 
 ##load rasters
-
 #lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_080W.tif")
-
 #plot(lossyear)
 
-
 ##what is projection? datum is WGS84
-lossyear@crs
+#lossyear@crs
 ```
 
 
 ```{r load_shps}
 ##Muni_shp: legal Amazon boundary
 ##muni_2010: Brazil boundary?? not sure
-
 
 
 ##selecting "estado_id = 1" to subset
@@ -90,15 +86,15 @@ tiles
 #dir.create("tiles_subset")
 
 #subset of subset
-output_folder <- "."
-download_tiles(tiles[2], output_folder = ".", dataset = "GFC-2018-v1.6",images = c("treecover2000", "lossyear", "gain"))
+dir.create("tile_outputs")
+download_tiles(tiles[2], output_folder = "tile_outputs", dataset = "GFC-2018-v1.6",images = c("treecover2000", "lossyear", "gain"))
 
 ##once grabbed all 'download_tiles' above, can use 'extract_gfc' to grab the "change" layers (treecover2000, loss, gain, lossyear, datamask)
 ##THIS IS NOT WORKING
 ##NEED TO WORK ON MOSAIC, make it into a RasterBrick?
 gfc <- extract_gfc(aoi = muni_spd,
-                   data_folder = "Malaria-Deforestation/test",
-                   filename = "test.tif")
+                   data_folder = "tile_outputs*",
+                   filename = "test.tiff")
 
 mosaic_test <- mosaic()
 raster1 <- raster("tiles_subset/Hansen_GFC-2018-v1.6_datamask_00N_070W.tif")
@@ -112,9 +108,9 @@ raster1 <- raster("tiles_subset/Hansen_GFC-2018-v1.6_datamask_00N_070W.tif")
 ```{r check_subset}
 
 ##check the tiles that they have cumulative loss for each year (2001, 2002, etc)
-lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_070W.tif") ##FIX
+lossyear <- raster("tile_outputs/Hansen_GFC-2018-v1.6_lossyear_00N_070W.tif") ##FIX
 
-treecover2000 <- raster("Hansen_GFC-2018-v1.6_treecover2000_00N_070W.tif") ##FIX
+treecover2000 <- raster("tile_outputs/Hansen_GFC-2018-v1.6_treecover2000_00N_070W.tif") ##FIX
 
 ##Raster Stack: cover in 2000 and lossyear
 stack <- raster::stack(treecover2000, lossyear)
@@ -125,8 +121,9 @@ stack <- raster::stack(treecover2000, lossyear)
 plot(lossyear)
 plot(muni_shp, add = T, col ="blue")
 
+#subset by muni_spd
 subsetclip <- crop(lossyear, extent(muni_spd))
-subset2000 <- crop(treecover2000, extent(muni_spd))
+#subset2000 <- crop(treecover2000, extent(muni_spd))
 
 plot(subsetclip)
 plot(muni_spd, add=T)
@@ -159,44 +156,41 @@ plot(filter_0102, ext=ext,
      xlab = "lat",
      ylab = "long")
 
-#test_map <- tm_shape(filter_2001) +
+test_map <- tm_shape(filter_2001) +
   tm_raster(title = "Test Map") +
   tm_shape(muni_spd) +
-  tm_layout(earth.boundary = ext) +
   tm_borders(col = "darkgreen")
   
-#test_map
+test_map
 
 ```
 
 
+##working with landscape metrics
 
-```{r test_gfc}
+```{r explore_landscapemetrics}
 
-##calc_gfc_tiles: figure out which tiles are needed based on AOI (shp file above)
-##for this function, need to convert muni_shp from multipolygon (spat out by sf) to a spatialpolygon object
+##show landscape with all patches/etc
+##using the filter_2001 subset ABOVE
+##show_landscape(filter_2001)
 
-#convert to spatial polygons
-spd <- sf::as_Spatial(st_geometry(muni_shp),
-                      IDs = as.character(1:nrow(muni_shp)))
+#lower res to get this working?? idk
+res2001 <- aggregate(filter_2001, fact = 10)
 
-#muni_df <- muni_shp
-#muni_df$geometry <- NULL
-muni_df <- as.data.frame(muni_shp)
+##PATCH LEVEL METRICS
+#lsm_p_"metric" = calculate at a patch level
+#directions = # of nearest neighbors? 
 
-muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
+#euclidean nearest-neighbor distance
+lsm_p_enn(res2001,
+          directions = 4,
+          verbose = T)
 
-tiles <- calc_gfc_tiles(aoi = muni_spd)
-tiles
-
-##once find the 'tiles' above, can use 'download_tiles' to grab the files from Hansen online 
-
-##once grabbed all 'download_tiles' above, can use 'extract_gfc' to grab the "change" layers (treecover2000, loss, gain, lossyear, datamask)
-
-##threshold_gfc after
-
-##THEN can use gfc_stats
-
+#wrapper for all patch level metrics: lsm
+allpatch_2001 <- calculate_lsm(res2001, 
+              level = "patch",
+              directions = 4,
+              verbose = T)
 ```
 
 
@@ -262,13 +256,6 @@ test_map2
 
 ```
 
-
-```{r explore_landscapemetrics}
-
-##show landscape with all patches/etc
-show_landscape(lossyear_crop)
-
-```
 
 
 ##General Spatial R Questions:
