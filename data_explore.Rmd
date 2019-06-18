@@ -182,6 +182,7 @@ lsm_abb <- lsm_abbreviations_names
 # show01 <- show_patches(landscape = filter_2001, class = "all", labels = FALSE)
 
 ##show area ONLY for path level
+##class = landscape type (so for these, class=0 is not forest and class=1 is forest)
 p_area01 <- lsm_p_area(filter_2001, 
                          directions = 8)
 
