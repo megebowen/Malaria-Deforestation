@@ -1,0 +1,93 @@
+---
+title: "test lsm"
+author: "Meghan Bowen"
+date: "6/18/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Load packages
+
+```{r load_packages}
+
+library(tidyverse) 
+library(raster) ##load and manipulate rasters
+library(sf) ##load shapefiles
+library(sp) ##spatial objects
+library(spatstat) ##work with shapefiles
+library(tmap) ##map rasters + shapefiles
+library(rgdal) ##for projections and coord systems
+
+library(gfcanalysis) ##package specifically for Hansen Forestry Data!
+library(landscapetools) ##for landscape plotting/viz?
+library(landscapemetrics) ##R equivalent to FRAGSTATS
+
+```
+
+## Part 1. Load municipalities
+
+```{r load_shps}
+
+muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
+
+##filtering to select Altamira (largest municipality in Amazon? idk)
+altamira_shp <- muni_shp %>% 
+  dplyr::filter(nome == "Altamira")
+
+```
+
+
+## Part 2. Load forestry rasters 
+
+```{r download_forestdata}
+
+##need to convert the municipality .shp to a "SpatialDataFrame" so gfcanalysis can grab the forestry tiles online
+spd <- sf::as_Spatial(st_geometry(muni_shp),
+                      IDs = as.character(1:nrow(muni_shp)))
+
+muni_df <- as.data.frame(muni_shp)
+
+muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
+
+#find the # of tiles needed. 
+tiles <- calc_gfc_tiles(aoi = muni_spd)
+tiles
+
+
+##CODE FOR ALL TILES
+
+```
+
+```{r download_forest_altamira}
+
+##need to convert the municipality .shp to a "SpatialDataFrame" so gfcanalysis can grab the forestry tiles online
+spd_alta <- sf::as_Spatial(st_geometry(altamira_shp),
+                      IDs = as.character(1:nrow(altamira_shp)))
+
+alta_df <- as.data.frame(altamira_shp)
+
+alta_spd <- sp::SpatialPolygonsDataFrame(spd_alta, data = alta_df)
+
+#find the # of tiles needed. 
+tiles <- calc_gfc_tiles(aoi = alta_spd)
+tiles
+
+##DOWNLOAD ALTAMIRA TILE
+download_tiles(tiles, output_folder = ".", dataset = "GFC-2018-v1.6",images = c("treecover2000", "lossyear", "gain"))
+
+```
+
+
+```{r altamira_subsets}
+
+##load the Altamira tile
+alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif") 
+
+alta_clip <- crop(alta_lossyear, extent(altamira_shp))
+
+
+```
+
