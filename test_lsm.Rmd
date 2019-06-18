@@ -113,5 +113,19 @@ p_area02 <- lsm_p_area(alta_2002,
 p_area03 <- lsm_p_area(alta_2003, 
                        directions = 8)
 
+##extract lsm --> use to plot patches?? look into more
+##with extract_lsm can specific metrics. 
+
 ```
 
+
+##notes 
+
+- write output to a .csv for the whole amazon. easy output for csv for metrics
+- each row is a municipality. for landscape level outputs
+- patch metrics would be an average across the municipality
+- each column has different metrics (edge length)
+- codigo_ibg == is like a county code. would be more useful to link up with malaria reporting data. maybe grab it and merge it with the landscapemetric data
+- once all of the years are separated out do the landscape level metric calculations 
+- four vs. eight neighbor differences? look @ papers in fragstats
+- run four and run eight, check for significant differences in outputs
