@@ -86,8 +86,32 @@ download_tiles(tiles, output_folder = ".", dataset = "GFC-2018-v1.6",images = c(
 ##load the Altamira tile
 alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif") 
 
-alta_clip <- crop(alta_lossyear, extent(altamira_shp))
+##clip the tile to the Altamira province
+alta_clip <- crop(alta_lossyear, extent(alta_spd))
 
+##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
+##Can I MAKE THIS CLEANER? SAPPLY/LAPPLY?
+alta_2001 <- alta_clip %in% 1
+alta_2002 <- alta_clip %in% 1:2
+alta_2003 <- alta_clip %in% 1:3
+
+
+```
+
+```{r altamira_lsm}
+
+##patch metrics for Altamira only
+
+lsm_abb <- lsm_abbreviations_names
+
+##Patch Area for Each Level (2001, 2001-2002, etc)
+##Directions = 8 meanest 8 directions of nearest neighbor calculations
+p_area01 <- lsm_p_area(alta_2001, 
+                       directions = 8)
+p_area02 <- lsm_p_area(alta_2002, 
+                       directions = 8)
+p_area03 <- lsm_p_area(alta_2003, 
+                       directions = 8)
 
 ```
 
