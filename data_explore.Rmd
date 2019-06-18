@@ -170,9 +170,23 @@ test_map
 
 ```{r explore_landscapemetrics}
 
+##abbreviations
+lsm_abb <- lsm_abbreviations_names
+
 ##show landscape with all patches/etc
 ##using the filter_2001 subset ABOVE
 ##show_landscape(filter_2001)
+
+# show patches of all classes
+##DO NOT RUN CRASHED MY R
+# show01 <- show_patches(landscape = filter_2001, class = "all", labels = FALSE)
+
+##show area ONLY for path level
+p_area01 <- lsm_p_area(filter_2001, 
+                         directions = 8)
+
+p_area0102 <- lsm_p_area(filter_0102, 
+                         directions = 8)
 
 #lower res to get this working?? idk
 res2001 <- aggregate(filter_2001, fact = 10)
