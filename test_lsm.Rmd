@@ -91,6 +91,10 @@ alta_clip <- crop(alta_lossyear, extent(alta_spd))
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 ##Can I MAKE THIS CLEANER? SAPPLY/LAPPLY?
+
+##write your own function?
+
+
 alta_2001 <- alta_clip %in% 1
 alta_2002 <- alta_clip %in% 1:2
 alta_2003 <- alta_clip %in% 1:3
