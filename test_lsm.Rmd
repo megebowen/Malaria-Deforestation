@@ -110,18 +110,28 @@ lsm_abb <- lsm_abbreviations_names
 
 ##Landscape Total Edge for Each Level (2001, 2001-2002, etc)
 ##DOES lsm_l_xx not let you choose between 4 and 8 neighbors?! what is the default?
-l_edge01 <- lsm_l_te(alta_2001)
-l_edge02 <- lsm_l_te(alta_2002)
-l_edge03 <- lsm_l_te(alta_2003)
+l_edge01 <- lsm_l_te(alta_2001) %>% 
+  dplyr::mutate(year="2001")
+l_edge02 <- lsm_l_te(alta_2002) %>% 
+  dplyr::mutate(year="2002")
+l_edge03 <- lsm_l_te(alta_2003) %>% 
+  dplyr::mutate(year="2003")
 
 ##combine rows for each municipality for each year
-alta_bind <- rbind(l_edge01, l_edge02, l_edge03)
+##only keep columns "year", "TotalEdge" [OR WHATEVER ADDITIONAL METRIC NAMES] "codigo_ibg" ??
+alta_bind <- rbind(l_edge01, l_edge02, l_edge03) %>% 
+  dplyr::mutate(codigo_ibg= "1500602") %>% 
+  dplyr::rename(TotalEdge = value)
+
+##combine altamira/muni with muni_shp
+alta_geo <- full_join(alta_bind, altamira_shp, by = "codigo_ibg")
 
 ```
 
 
 ##notes 
 
+- MAKE INTO A FINAL SCRIPT, WILL BE FASTER 
 - write output to a .csv for the whole amazon. easy output for csv for metrics
 - each row is a municipality. for landscape level outputs
 - patch metrics would be an average across the municipality
