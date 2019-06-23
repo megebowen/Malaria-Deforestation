@@ -129,14 +129,19 @@ alta_geo <- full_join(alta_bind, altamira_shp, by = "codigo_ibg")
 ```
 
 
-##notes 
+##notes 6.18.19
 
-- MAKE INTO A FINAL SCRIPT, WILL BE FASTER 
 - write output to a .csv for the whole amazon. easy output for csv for metrics
 - each row is a municipality. for landscape level outputs
 - patch metrics would be an average across the municipality
 - each column has different metrics (edge length)
 - codigo_ibg == is like a county code. would be more useful to link up with malaria reporting data. maybe grab it and merge it with the landscapemetric data
 - once all of the years are separated out do the landscape level metric calculations 
-- four vs. eight neighbor differences? look @ papers in fragstats
-- run four and run eight, check for significant differences in outputs
+- four vs. eight neighbor differences? look @ papers in fragstats. run four and run eight, check for significant differences in outputs
+
+##notes 6.23.19
+
+- MAKE INTO A FINAL SCRIPT, WILL BE FASTER 
+- ok quick question. since the raster values (1 for now) are technically lost forest, should the value (1 for now) be reversed to represent still intact forest?? **so, if a value of 0 is intact forest and 1 is forest loss in X year, should these be flipped so that 1 is intact forest and 0 is forest loss in X year??**
+- once all of the years are separated out do the landscape level metric calculations --> **FOR EACH YEAR?**
+- four vs. eight neighbor differences? look @ papers in fragstats **might not be relevant for landscape level calclations**
