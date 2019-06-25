@@ -99,17 +99,49 @@ year_fxn <- function(year) {
   return(alta_yr)
 }
 
-##test <- for(i in 1:values(alta_clip)){
-##  alta_clip %in% i
-##}
-  
+
 alta_2001 <- alta_clip %in% 1
-alta01
-alta_2002 <- alta_Clip %in% 1:2
+alta_2002 <- alta_clip %in% 1:2
 alta_2003 <- alta_clip %in% 1:3
 
 
 ```
+
+##Function 1: Separate out by each municipality
+
+- basically need to create 807 outputs, one for each unique municipality. These are the landscapes to run lsm on
+
+```{r filter_allmuni}
+
+##function #1: filter all by landscape (municipality)
+#load all municipality shapefile
+muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
+
+#for loop to separate out by "nome"
+##this is almost it! I only have "Guimares" as an output rn. 
+landscape_output <- vector("character", length = ncol(muni_shp))
+
+for(i in muni_shp$nome) {
+  landscape_output <- muni_shp %>% 
+    dplyr::filter(nome == i)
+}
+
+landscape_output
+
+##filtering to select Altamira (largest municipality in Amazon? idk)
+
+altamira_shp <- muni_shp %>% 
+  dplyr::filter(nome == "Altamira")
+
+```
+
+
+##Function 2: Separate out by each year (cell value?)
+- 807 (# of munis) * 18 (# of years) = 14,526 unique landscapes (and 14,526 outputs?!)
+
+##Function 3: Run LSM for each municipality (landscape) for each year (cell value)
+
+##Function 4: Combine ^^ results into one df
 
 ```{r altamira_lsm}
 
