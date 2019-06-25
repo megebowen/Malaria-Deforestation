@@ -119,9 +119,10 @@ muni_split <- split(muni_shp, muni_shp$nome)
 alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif")
 alta_crop <- crop(alta_lossyear, extent(altamira_shp))
 alta_mask <- mask(alta_crop, altamira_shp)
-#clip the tile to the Altamira province
 
-alta_clip2 <- crop(alta_lossyear, extent(muni_split$Altamira))
+#clip the tile to the Altamira province
+alta_crop2 <- crop(alta_lossyear, extent(muni_split$Altamira))
+alta_mask2 <- mask(alta_crop2, muni_split$Altamira) ##alta_mask2 %in% 1 is the same as alta_2001 above! hooray.
 
 ```
 
@@ -184,3 +185,10 @@ function_name <- function(arg1, arg2, arg 3=4) {
 - ok quick question. since the raster values (1 for now) are technically lost forest, should the value (1 for now) be reversed to represent still intact forest?? **so, if a value of 0 is intact forest and 1 is forest loss in X year, should these be flipped so that 1 is intact forest and 0 is forest loss in X year??**
 - once all of the years are separated out do the landscape level metric calculations --> **FOR EACH YEAR?**
 - four vs. eight neighbor differences? look @ papers in fragstats **might not be relevant for landscape level calclations**
+
+##notes 6.25.19
+
+- is there an argument to ignore the border of the municipality to calculate metrics? what is the total edge calculation giving us, and is it ignoring the borders in calculations?
+- NEED TO DO RASTER CALCULATIONS to get forest that remains. 1 is forest remains, 0 is not forest. forest in 2001 == forest in 2001- forest in 2000. **do this after the code is good**
+- if bored, look at other metrics for landscapes and the raster calculations
+
