@@ -117,21 +117,14 @@ alta_2003 <- alta_clip %in% 1:3
 #load all municipality shapefile
 muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
 
-#for loop to separate out by "nome"
-##this is almost it! I only have "Guimares" as an output rn. 
-landscape_output <- vector("character", length = ncol(muni_shp))
+muni_split <- split(muni_shp, muni_shp$nome)
 
-for(i in muni_shp$nome) {
-  landscape_output <- muni_shp %>% 
-    dplyr::filter(nome == i)
-}
+##test this on altamira
+#load the Altamira tile. 
+alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif") 
 
-landscape_output
-
-##filtering to select Altamira (largest municipality in Amazon? idk)
-
-altamira_shp <- muni_shp %>% 
-  dplyr::filter(nome == "Altamira")
+#clip the tile to the Altamira province
+alta_clip2 <- crop(alta_lossyear, extent(muni_split$Altamira))
 
 ```
 
