@@ -90,13 +90,10 @@ alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif")
 alta_crop <- crop(alta_lossyear, extent(altamira_shp))
 
 ##mask extent to Altamira
-alta_mask <- mask(alta_clip, altamira_shp)
+alta_mask <- mask(alta_crop, altamira_shp)
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 ##Can I MAKE THIS CLEANER? SAPPLY/LAPPLY?
-
-##write your own function?
-
 
 alta_2001 <- alta_mask %in% 1
 alta_2002 <- alta_mask %in% 1:2
@@ -120,8 +117,8 @@ muni_split <- split(muni_shp, muni_shp$nome)
 ##test this on altamira
 #load the Altamira tile. 
 alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif")
-alta_clip <- crop(alta_lossyear, extent(altamira_shp))
-alta_mask <- mask(alta_clip, altamira_shp)
+alta_crop <- crop(alta_lossyear, extent(altamira_shp))
+alta_mask <- mask(alta_crop, altamira_shp)
 #clip the tile to the Altamira province
 
 alta_clip2 <- crop(alta_lossyear, extent(muni_split$Altamira))
@@ -157,7 +154,8 @@ alta_bind <- rbind(l_edge01, l_edge02, l_edge03) %>%
   dplyr::mutate(codigo_ibg= "1500602") %>% 
   dplyr::rename(TotalEdge = value)
 
-##combine altamira/muni with muni_shp
+##combine altamira/muni with muni_shp. 
+##FYI THESE VALUES ARE DIFFERENT FOR ALTA_MASK THAN ALTA_CROP!!
 alta_geo <- full_join(alta_bind, altamira_shp, by = "codigo_ibg")
 
 ```
