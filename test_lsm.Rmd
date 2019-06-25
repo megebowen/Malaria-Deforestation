@@ -83,26 +83,24 @@ download_tiles(tiles, output_folder = ".", dataset = "GFC-2018-v1.6",images = c(
 
 ```{r altamira_subsets}
 
-##load the Altamira tile. CREATE INTO A RASTER BRICK?
-alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif") 
+##load the Altamira tile.
+alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif")
 
-##clip the tile to the Altamira province
-alta_clip <- crop(alta_lossyear, extent(altamira_shp))
+##crop extent to Altamira
+alta_crop <- crop(alta_lossyear, extent(altamira_shp))
+
+##mask extent to Altamira
+alta_mask <- mask(alta_clip, altamira_shp)
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 ##Can I MAKE THIS CLEANER? SAPPLY/LAPPLY?
 
 ##write your own function?
 
-year_fxn <- function(year) {
-  alta_yr <- alta_clip %in% 1:year
-  return(alta_yr)
-}
 
-
-alta_2001 <- alta_clip %in% 1
-alta_2002 <- alta_clip %in% 1:2
-alta_2003 <- alta_clip %in% 1:3
+alta_2001 <- alta_mask %in% 1
+alta_2002 <- alta_mask %in% 1:2
+alta_2003 <- alta_mask %in% 1:3
 
 
 ```
@@ -121,9 +119,11 @@ muni_split <- split(muni_shp, muni_shp$nome)
 
 ##test this on altamira
 #load the Altamira tile. 
-alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif") 
-
+alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif")
+alta_clip <- crop(alta_lossyear, extent(altamira_shp))
+alta_mask <- mask(alta_clip, altamira_shp)
 #clip the tile to the Altamira province
+
 alta_clip2 <- crop(alta_lossyear, extent(muni_split$Altamira))
 
 ```
