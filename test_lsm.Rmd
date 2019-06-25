@@ -114,6 +114,24 @@ muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios"
 
 muni_split <- split(muni_shp, muni_shp$nome)
 
+
+##function 2: get raster data for every polygon
+total_poly <- length(muni_spd@polygons) #note this will only work for spd
+
+#output
+poly_rast_list <- list()
+
+#function DO NOT RUN
+for (i in 1:total_poly) {
+  ##crop extent to Altamira
+  municrop <- crop(alta_lossyear, extent(muni_spd[i,])) ##need to change to all lossyear raster
+  
+  ##mask extent to Altamira
+  munimask <- mask(municrop[i,], muni_spd[i,])##test if this works
+}
+
+#return
+
 ##test this on altamira
 #load the Altamira tile. 
 alta_lossyear <- raster("Hansen_GFC-2018-v1.6_lossyear_00N_060W.tif")
