@@ -92,8 +92,21 @@ alta_crop <- crop(alta_lossyear, extent(altamira_shp))
 ##mask extent to Altamira
 alta_mask <- mask(alta_crop, altamira_shp)
 
+alta_values <- getValues(alta_mask)
+
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 ##Can I MAKE THIS CLEANER? SAPPLY/LAPPLY?
+##raster calculator?
+
+#output
+year_rast_list <- list()
+
+#function
+year_rast <- function(alta_mask) {
+  alta_i <- alta_mask %in% 1:alta_values
+}
+
+#return
 
 alta_2001 <- alta_mask %in% 1
 alta_2002 <- alta_mask %in% 1:2
@@ -123,10 +136,10 @@ poly_rast_list <- list()
 
 #function DO NOT RUN
 for (i in 1:total_poly) {
-  ##crop extent to Altamira
+  ##crop to extent of EACH polygon in muni SpatialDataFrame (i)
   municrop <- crop(alta_lossyear, extent(muni_spd[i,])) ##need to change to all lossyear raster
   
-  ##mask extent to Altamira
+  ##mask with above cropped extent (i) for EACH polygon in muni SpatialDataFrame (i)
   munimask <- mask(municrop[i,], muni_spd[i,])##test if this works
 }
 
