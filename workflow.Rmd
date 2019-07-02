@@ -11,9 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##NOTES
 
-- this is the general workflow to run the 
+- THESE STEPS NEED TO BE CONVERTED TO A FINAL SCRIPT BEFORE RUNNING!!!
+- this is the general workflow to run the landscapemetrics for the Amazon Basin, using Global Forestry change data and the outlines of each Amazon municipality
 - all rasters downloaded from the Hansen et al Global Forestry Chage dataset (2018, v1.6) https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.6.html
 - shapefiles from Andy Macdonald, covering the entire legal Amazon Basin
+
 
 ##1. Load Packages
 
@@ -68,6 +70,7 @@ total_poly <- length(muni_spd@polygons) #note this will only work for spd
 #find the # of tiles needed. 
 tiles <- calc_gfc_tiles(aoi = muni_spd)
 tiles
+
 
 ##CODE FOR ALL TILES
 
