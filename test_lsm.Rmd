@@ -59,6 +59,13 @@ tiles
 
 ##CODE FOR ALL TILES
 
+#1. Download
+
+#2. Mosaic all rasters together
+
+#3. Extract fxn to extract tiles BY the muni_spd
+#extract_muni <- extract(XXMOSAIC, muni_spd)
+
 ```
 
 ```{r download_forest_altamira}
@@ -95,8 +102,6 @@ alta_mask <- mask(alta_crop, altamira_shp)
 alta_values <- getValues(alta_mask)
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
-##Can I MAKE THIS CLEANER? SAPPLY/LAPPLY?
-##raster calculator?
 
 #output
 year_rast_list <- list()
@@ -104,7 +109,14 @@ year_rast_list <- list()
 #function
 year_rast <- function(alta_mask) {
   alta_i <- alta_mask %in% 1:alta_values
-}
+
+  if
+    i = "NA"
+  ##leave
+  
+  else
+    alta_i
+  }
 
 #return
 
