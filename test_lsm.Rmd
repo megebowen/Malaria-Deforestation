@@ -64,7 +64,7 @@ tiles
 #2. Mosaic all rasters together
 
 #3. Extract fxn to extract tiles BY the muni_spd
-#extract_muni <- extract(XXMOSAIC, muni_spd)
+##extract_muni <- extract(XXMOSAIC, muni_spd)
 
 ```
 
@@ -100,6 +100,11 @@ alta_crop <- crop(alta_lossyear, extent(altamira_shp))
 alta_mask <- mask(alta_crop, altamira_shp)
 
 alta_values <- getValues(alta_mask)
+
+alta_extract <- extract(alta_lossyear, altamira_shp,
+                        method = 'simple',
+                        fun = max,
+                        sp = T)
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 
@@ -234,4 +239,7 @@ function_name <- function(arg1, arg2, arg 3=4) {
 - is there an argument to ignore the border of the municipality to calculate metrics? what is the total edge calculation giving us, and is it ignoring the borders in calculations?
 - NEED TO DO RASTER CALCULATIONS to get forest that remains. 1 is forest remains, 0 is not forest. forest in 2001 == forest in 2001- forest in 2000. **do this after the code is good**
 - if bored, look at other metrics for landscapes and the raster calculations
+
+
+
 
