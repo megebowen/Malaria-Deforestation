@@ -101,10 +101,6 @@ alta_mask <- mask(alta_crop, altamira_shp)
 
 alta_values <- getValues(alta_mask)
 
-alta_extract <- extract(alta_lossyear, altamira_shp,
-                        method = 'simple',
-                        fun = max,
-                        sp = T)
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 
