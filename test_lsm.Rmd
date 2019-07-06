@@ -112,13 +112,6 @@ year_rast_list <- list()
 #function
 year_rast <- function(alta_mask) {
   alta_i <- alta_mask %in% 1:alta_values
-
-  if
-    i = "NA"
-  ##leave
-  
-  else
-    alta_i
   }
 
 #return
