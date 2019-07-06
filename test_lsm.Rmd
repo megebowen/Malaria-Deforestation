@@ -101,6 +101,8 @@ alta_mask <- mask(alta_crop, altamira_shp)
 
 alta_values <- getValues(alta_mask)
 
+#ERROR: no loop for break/next, jumping to top level 
+###alta_extract <- extract(x = alta_lossyear, y = alta_spd, df = TRUE)
 
 ##filter by each year. Includes all previous years (so 2002 includes 1 AND 2 layers)
 
@@ -120,6 +122,8 @@ year_rast <- function(alta_mask) {
   }
 
 #return
+
+year_rast_list <- list(year_rast)
 
 alta_2001 <- alta_mask %in% 1
 alta_2002 <- alta_mask %in% 1:2
