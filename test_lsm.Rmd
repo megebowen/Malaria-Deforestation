@@ -85,6 +85,9 @@ tiles
 ##DOWNLOAD ALTAMIRA TILE
 download_tiles(tiles, output_folder = ".", dataset = "GFC-2018-v1.6",images = c("treecover2000", "lossyear", "gain"))
 
+##extract
+alta_data <- extract_gfc(alta_spd, data_folder = "/Users/meghanbowen/Desktop/Bren/Macdonald_Lab/github/Malaria-Deforestation/tile_outputs", filename = "/Users/meghanbowen/Desktop/Bren/Macdonald_Lab/github/Malaria-Deforestation/GFC_studyArea.tif")
+
 ```
 
 
@@ -145,12 +148,12 @@ total_poly <- length(muni_spd@polygons) #note this will only work for spd
 poly_rast_list <- list()
 
 #function DO NOT RUN
-for (i in 1:total_poly) {
+for (nome in muni_spd@data) {
   ##crop to extent of EACH polygon in muni SpatialDataFrame (i)
-  municrop <- crop(alta_lossyear, extent(muni_spd[i,])) ##need to change to all lossyear raster
+  municrop <- crop(alta_lossyear, extent(muni_spd$nome)) ##need to change to all lossyear raster
   
   ##mask with above cropped extent (i) for EACH polygon in muni SpatialDataFrame (i)
-  munimask <- mask(municrop[i,], muni_spd[i,])##test if this works
+  munimask <- mask(municrop, muni_spd$nome)##test if this works
 }
 
 #return
