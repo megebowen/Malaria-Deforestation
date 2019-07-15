@@ -113,9 +113,9 @@ alta_values <- getValues(alta_mask)
 year_rast_list <- list()
 
 #function
-year_rast <- function(alta_mask) {
-  alta_i <- alta_mask %in% 1:alta_values
-  }
+for (i in 1:18){
+  year_rast_list[[i]] <- mask(alta_crop, altamira_shp)
+}
 
 #return
 
