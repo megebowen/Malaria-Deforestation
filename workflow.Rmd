@@ -55,10 +55,11 @@ muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
 
 ```{r split_munis}
 
-##DO NOT USE SPLIT BY NOME
+##DO NOT USE SPLIT BY NOME. must use split BY CODIGO_IBG
 ##muni_split <- split(muni_shp, muni_shp$nome)
 
 codigo_split <- split(muni_shp, muni_shp$codigo_ibg)
+##plot(codigo_split$`1100015`) ##this works!
 
 ##function 2: get spatial data for every polygon
 total_poly <- length(muni_spd@polygons) #note this will only work for spd
@@ -88,9 +89,23 @@ tiles
 
 #2. Mosaic all rasters together
 
-#3. Extract fxn to extract tiles BY the muni_spd
+#3. Extract fxn to extract tiles BY the muni_spd. WILL THIS WORK INSTEAD OF CROPPING?!
 ##extract_muni <- extract(XXMOSAIC, muni_spd)
 
 ```
 
+##4. Crop each municipality to total Amazon raster
+
+```{r crop_mask_all}
+
+#load raster
+#all_lossyear <- raster("ALLLOSSYEARTITLE.tif")
+
+#crop
+#muni_crop <- crop(all_lossyear, extent(codigo_split))
+
+#mask
+#muni_mask <- mask(muni_crop, codigo_split)
+
+```
 
