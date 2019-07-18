@@ -208,7 +208,7 @@ alta_lsm_list <- list()
 
 #function
 for (i in 1:18){
-  alta_lsm_list[[i]] <- lsm_l_te(year_rast_list$i)
+  alta_lsm_list[[i]] <- lsm_l_te(year_rast_list[[i]])
 }
 
 #return
