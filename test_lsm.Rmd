@@ -138,8 +138,12 @@ alta_2003 <- alta_mask %in% 1:3
 #load all municipality shapefile
 muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
 
+##smaller size if split by muni_shp
+####ERROR: MUNI SPLIT BY NOME ONLY RETURNS A LIST WITH 801!
 muni_split <- split(muni_shp, muni_shp$nome)
 
+##OK: CODIGO SPLIT BY CODIGO_IBG RETURNS ALL 807!!!
+codigo_split <- split(muni_shp, muni_shp$codigo_ibg)
 
 ##function 2: get raster data for every polygon
 total_poly <- length(muni_spd@polygons) #note this will only work for spd
