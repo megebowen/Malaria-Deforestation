@@ -114,7 +114,7 @@ year_rast_list <- list()
 
 #function
 for (i in 1:18){
-  year_rast_list[[i]] <- mask(alta_crop, altamira_shp)
+  year_rast_list[[i]] <- alta_mask %in% 1:i
 }
 
 #return
