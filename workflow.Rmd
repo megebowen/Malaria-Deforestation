@@ -55,7 +55,10 @@ muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
 
 ```{r split_munis}
 
-muni_split <- split(muni_shp, muni_shp$nome)
+##DO NOT USE SPLIT BY NOME
+##muni_split <- split(muni_shp, muni_shp$nome)
+
+codigo_split <- split(muni_shp, muni_shp$codigo_ibg)
 
 ##function 2: get spatial data for every polygon
 total_poly <- length(muni_spd@polygons) #note this will only work for spd
