@@ -132,6 +132,13 @@ year_rast_list <- list()
 
 ```{r all_lsm}
 
+#output
+all_lsm_list <- list()
+
+#function
+#for (i in 1:18){
+#  all_lsm_list[[i]] <- lsm_l_te(year_rast_list[[i]])
+# }
 
 
 ```
