@@ -126,9 +126,9 @@ alta_2003 <- alta_mask %in% 1:3
 
 ##COMPARE
 par(mfrow=c(1,2))
-plot(alta_2002)
+plot(alta_2003)
 plot(altamira_shp$geometry, add=T)
-plot(year_rast_list[[2]])
+plot(year_rast_list[[3]])
 plot(altamira_shp$geometry, add=T)
 
 ```
@@ -202,6 +202,20 @@ l_edge02 <- lsm_l_te(alta_2002) %>%
 l_edge03 <- lsm_l_te(alta_2003) %>% 
   dplyr::mutate(year="2003")
 
+##for loop to run all years for all rasters
+
+alta_lsm_list <- list()
+
+#function
+for (i in 1:18){
+  alta_lsm_list[[i]] <- lsm_l_te(year_rast_list$i)
+}
+
+#return
+```
+
+
+```{r combination}
 ##combine rows for each municipality for each year
 ##only keep columns "year", "TotalEdge" [OR WHATEVER ADDITIONAL METRIC NAMES] "codigo_ibg" ??
 alta_bind <- rbind(l_edge01, l_edge02, l_edge03) %>% 
