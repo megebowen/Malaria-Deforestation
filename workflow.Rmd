@@ -109,3 +109,22 @@ tiles
 
 ```
 
+##5. Separate out by each lossyear
+
+- for loop to split every year out (1 to 18)
+- separate by codigo_ibg first?
+
+```{r every_lossyear}
+
+#output
+year_rast_list <- list()
+
+#function
+#for (i in 1:18){
+#  year_rast_list[[i]] <- MUNI_MASK %in% 1:i
+# }
+
+#return
+
+```
+

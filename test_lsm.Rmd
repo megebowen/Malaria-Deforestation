@@ -119,12 +119,17 @@ for (i in 1:18){
 
 #return
 
-year_rast_list <- list(year_rast)
 
 alta_2001 <- alta_mask %in% 1
 alta_2002 <- alta_mask %in% 1:2
 alta_2003 <- alta_mask %in% 1:3
 
+##COMPARE
+par(mfrow=c(1,2))
+plot(alta_2002)
+plot(altamira_shp$geometry, add=T)
+plot(year_rast_list[[2]])
+plot(altamira_shp$geometry, add=T)
 
 ```
 
