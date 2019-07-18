@@ -128,3 +128,11 @@ year_rast_list <- list()
 
 ```
 
+##6. Run LSM
+
+```{r all_lsm}
+
+
+
+```
+
