@@ -261,5 +261,11 @@ function_name <- function(arg1, arg2, arg 3=4) {
 - if bored, look at other metrics for landscapes and the raster calculations
 
 
+- mean patch size: interesting for loss in the year (mean patch size of forest loss) and total forest loss
+- edge density
+- total cover
+- patch clumpiness: is loss happening in distinct patterns? or randomly across the landscape?
+
+
 
 
