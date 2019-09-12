@@ -118,7 +118,7 @@ for (i in 1:18){
 }
 
 #return
-
+alta_2016 <- alta_mask %in% 1:16
 
 alta_2001 <- alta_mask %in% 1
 alta_2002 <- alta_mask %in% 1:2
@@ -261,10 +261,10 @@ function_name <- function(arg1, arg2, arg 3=4) {
 - if bored, look at other metrics for landscapes and the raster calculations
 
 
-- mean patch size: interesting for loss in the year (mean patch size of forest loss) and total forest loss
-- edge density
-- total cover
-- patch clumpiness: is loss happening in distinct patterns? or randomly across the landscape?
+- mean patch size: interesting for loss in the year (mean patch size of forest loss) and total forest loss :: lsm_l_area_mn
+- edge density :: lsm_l_ed
+- total cover ::lsm_l_ta (directions = 8)
+- patch clumpiness: is loss happening in distinct patterns? or randomly across the landscape? ::lsm_c_clumpy
 
 
 
