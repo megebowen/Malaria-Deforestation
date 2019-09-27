@@ -195,11 +195,29 @@ lsm_abb <- lsm_abbreviations_names
 
 ##Landscape Total Edge for Each Level (2001, 2001-2002, etc)
 ##DOES lsm_l_xx not let you choose between 4 and 8 neighbors?! what is the default?
-l_edge01 <- lsm_l_te(alta_2001) %>% 
-  dplyr::mutate(year="2001")
-l_edge02 <- lsm_l_te(alta_2002) %>% 
+lsm_te <- lsm_l_te(alta_2001)
+lsm_ed <- lsm_l_ed(alta_2001) %>% 
+  dplyr::select(metric, value) %>% 
+  rename(metric_ed = metric, value_ed = value)
+lsm_area <- lsm_l_area_mn(alta_2001)
+lsm_ta <- lsm_l_ta(alta_2001, directions = 8)
+
+lsm_all <- cbind(alta_spd$codigo_ibg, lsm_te, lsm_ed) %>% 
+  mutate(year = 2001)
+
+lsm_te2 <- lsm_l_te(alta_2002)
+lsm_ed2 <- lsm_l_ed(alta_2002) 
+lsm_area2 <- lsm_l_area_mn(alta_2002)
+lsm_ta2 <- lsm_l_ta(alta_2002, directions = 8)
+
+lsm_all2 <- rbind(lsm_te2, lsm_ed2, lsm_area2, lsm_ta2) %>% 
+  mutate(year = 2002)
+
+lsm_upd <- rbind(lsm_all, lsm_all2)
+
+lsm_02 <- lsm_l_te(alta_2002) %>% 
   dplyr::mutate(year="2002")
-l_edge03 <- lsm_l_te(alta_2003) %>% 
+lsm_03 <- lsm_l_te(alta_2003) %>% 
   dplyr::mutate(year="2003")
 
 ##for loop to run all years for all rasters
