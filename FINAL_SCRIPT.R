@@ -218,47 +218,84 @@ write.csv(lsm_2001_df, 'lsm_2001_df.csv') ##CHANGE YEAR X2
 
 #############MERGE: ALL INDIVIDUAL YEARS###################
 ##load csvs
-lsm_2001_df <- read_csv("lsm_2001_df.csv")
-lsm_2002_df <- read_csv("lsm_2002_df.csv")
-lsm_2003_df <- read_csv("lsm_2003_df.csv")
-lsm_2004_df <- read_csv("lsm_2004_df.csv")
-lsm_2005_df <- read_csv("lsm_2005_df.csv")
-lsm_2006_df <- read_csv("lsm_2006_df.csv")
-lsm_2007_df <- read_csv("lsm_2007_df.csv")
-lsm_2008_df <- read_csv("lsm_2008_df.csv")
-lsm_2009_df <- read_csv("lsm_2009_df.csv")
-lsm_2010_df <- read_csv("lsm_2010_df.csv")
-lsm_2011_df <- read_csv("lsm_2011_df.csv")
-lsm_2012_df <- read_csv("lsm_2012_df.csv")
-lsm_2013_df <- read_csv("lsm_2013_df.csv")
-lsm_2014_df <- read_csv("lsm_2014_df.csv")
-lsm_2015_df <- read_csv("lsm_2015_df.csv")
-lsm_2016_df <- read_csv("lsm_2016_df.csv")
-lsm_2017_df <- read_csv("lsm_2017_df.csv")
-lsm_2018_df <- read_csv("lsm_2018_df.csv")
+##load csvs
+lsm_2001 <- read_csv("lsm_2001_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2002 <- read_csv("lsm_2002_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2003 <- read_csv("lsm_2003_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2004 <- read_csv("lsm_2004_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2005 <- read_csv("lsm_2005_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2006 <- read_csv("lsm_2006_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2007 <- read_csv("lsm_2007_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2008 <- read_csv("lsm_2008_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2009 <- read_csv("lsm_2009_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2010 <- read_csv("lsm_2010_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2011 <- read_csv("lsm_2011_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2012 <- read_csv("lsm_2012_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2013 <- read_csv("lsm_2013_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2014 <- read_csv("lsm_2014_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2015 <- read_csv("lsm_2015_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2016 <- read_csv("lsm_2016_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2017 <- read_csv("lsm_2017_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
+lsm_2018 <- read_csv("lsm_2018_df.csv")[,2:15] %>% 
+  rename(codigo = `one_poly@data$codigo_ibg`) %>% 
+  dplyr::select(year, codigo, value_te, value_ed, value_mean_area, value_total_area)
 
 
-lsm_years <- full_join(lsm_2001_df, lsm_2002_df) %>% 
-  full_join(lsm_2003_df) %>%
-  full_join(lsm_2004_df) %>% 
-  full_join(lsm_2005_df) %>% 
-  full_join(lsm_2006_df) %>% 
-  full_join(lsm_2007_df) %>%
-  full_join(lsm_2008_df) %>%
-  full_join(lsm_2009_df) %>%
-  full_join(lsm_2010_df) %>%
-  full_join(lsm_2011_df) %>%
-  full_join(lsm_2012_df) %>%
-  full_join(lsm_2013_df) %>%
-  full_join(lsm_2014_df) %>%
-  full_join(lsm_2015_df) %>%
-  full_join(lsm_2016_df) %>%
-  full_join(lsm_2017_df) %>%
-  full_join(lsm_2018_df)
+lsm_years <- full_join(lsm_2001, lsm_2002) %>% 
+  full_join(lsm_2003) %>%
+  full_join(lsm_2004) %>% 
+  full_join(lsm_2005) %>% 
+  full_join(lsm_2006) %>% 
+  full_join(lsm_2007) %>%
+  full_join(lsm_2008) %>%
+  full_join(lsm_2009) %>%
+  full_join(lsm_2010) %>%
+  full_join(lsm_2011) %>%
+  full_join(lsm_2012) %>%
+  full_join(lsm_2013) %>%
+  full_join(lsm_2014) %>%
+  full_join(lsm_2015) %>%
+  full_join(lsm_2016) %>%
+  full_join(lsm_2017) %>%
+  full_join(lsm_2018)
 
 
 #write output to csv
-write.csv(lsm_years, "final_lsm_df.csv")
+write.csv(lsm_years, "all_lsm.csv")
 
 
 
