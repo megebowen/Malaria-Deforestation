@@ -1,0 +1,164 @@
+---
+title: "Workflow"
+author: "Meghan Bowen"
+date: "7/2/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##NOTES
+
+- THESE STEPS NEED TO BE CONVERTED TO A FINAL SCRIPT BEFORE RUNNING!!!
+- this is the general workflow to run the landscapemetrics for the Amazon Basin, using Global Forestry change data and the outlines of each Amazon municipality
+- all rasters downloaded from the Hansen et al Global Forestry Chage dataset (2018, v1.6) https://earthenginepartners.appspot.com/science-2013-global-forest/download_v1.6.html
+- shapefiles from Andy Macdonald, covering the entire legal Amazon Basin
+
+
+##1. Load Packages
+
+```{r load_packages}
+
+library(tidyverse) #data cleaning and manipulation
+library(raster) ##load and manipulate rasters
+library(sf) ##load shapefiles
+library(sp) ##additional functions for spatial objects
+library(spatstat) ##work with shapefiles
+library(rgdal) ##for projections and coord systems
+library(gfcanalysis) ##package specifically for Hansen Forestry Data!
+library(landscapemetrics) ##R equivalent to FRAGSTATS
+
+```
+
+
+##2. Load & clean shapefiles
+
+```{r load_shps}
+
+muni_shp <- read_sf(dsn = 'municipality_shapefiles', layer = "Amazon_Municipios")
+##need to convert the municipality .shp to a "SpatialDataFrame" so gfcanalysis can grab the forestry tiles online
+spd <- sf::as_Spatial(st_geometry(muni_shp),
+                      IDs = as.character(1:nrow(muni_shp)))
+muni_df <- as.data.frame(muni_shp)
+muni_spd <- sp::SpatialPolygonsDataFrame(spd, data = muni_df)
+
+```
+
+
+```{r split_munis}
+
+##DO NOT USE SPLIT BY NOME. must use split BY CODIGO_IBG
+##muni_split <- split(muni_shp, muni_shp$nome)
+
+codigo_split <- split(muni_shp, muni_shp$codigo_ibg)
+
+##plot(codigo_split$`1100015`) ##this works!
+
+##function 2: get spatial data for every polygon
+total_poly <- length(muni_spd@polygons) #note this will only work for spd
+
+```
+
+
+##3. Load rasters & mosaic
+
+```{r download_all}
+
+#find the # of tiles needed. 
+tiles <- calc_gfc_tiles(aoi = muni_spd)
+tiles
+
+
+##CODE FOR ALL TILES
+
+#1. Download. NEED TO CHANGE THE OUTPUT FOLDER!!!!  
+download_tiles(tiles, output_folder,
+               dataset = "GFC-2018-v1.6",
+               images = c("treecover2000", "gain", "lossyear", "datamask"))
+
+```
+
+```{r mosaic_amazon}
+
+#working directory at Bren for ALL TILES
+setwd("\\\\esm.ucsb.edu/research/research-1-4tb/macdonald-research/Amazon_Malaria_Project/tiles")
+
+#2. Mosaic all rasters together
+#prep: get all rasters loaded, format into list
+rastlist <- list.files(getwd(), pattern = "lossyear", all.files = T, full.names = F) 
+all_rasters <- lapply(rastlist, raster)
+
+#merge all: 1.5 hrs
+merge_hansen <- do.call(merge, all_rasters)
+
+#write all: 1.0 hrs. about a 1GB raster
+writeRaster(merge_hansen, filename = "lossyear_all.tif", format = "GTiff")
+
+```
+
+
+```{r extract_all}
+
+lossyear <- raster("lossyear_arc_COPY.tif")
+
+codigo_shp <- muni_shp %>% 
+  dplyr::select(codigo_ibg)
+
+#3. Extract fxn to extract tiles BY the muni_spd. WILL THIS WORK INSTEAD OF CROPPING?!
+#extract_muni <- extract(lossyear, codigo_shp)
+
+#crop
+muni_crop <- crop(lossyear, extent(codigo_shp))
+#mask
+##muni_mask <- mask(muni_crop, codigo_shp) "subscript out of bonds"
+
+
+```
+
+##4. Crop each municipality to total Amazon raster
+
+```{r crop_mask_all}
+
+#load raster
+#all_lossyear <- raster("ALLLOSSYEARTITLE.tif")
+#crop
+#muni_crop <- crop(all_lossyear, extent(codigo_split))
+#mask
+#muni_mask <- mask(muni_crop, codigo_split)
+
+```
+
+##5. Separate out by each lossyear
+
+- for loop to split every year out (1 to 18)
+- separate by codigo_ibg first?
+
+```{r every_lossyear}
+
+#output
+year_rast_list <- list()
+
+#function
+#for (i in 1:18){
+#  year_rast_list[[i]] <- MUNI_MASK %in% 1:i
+# }
+
+#return
+
+```
+
+##6. Run LSM
+
+```{r all_lsm}
+
+#output
+all_lsm_list <- list()
+
+#function
+#for (i in 1:18){
+#  all_lsm_list[[i]] <- lsm_l_te(year_rast_list[[i]])
+# }
+
+```
